@@ -314,5 +314,6 @@
                                  = 125000*10^-3  -1
                                  = 124
                             
+           We can use 1024 Prescaler.
            
-     
+          Code to generate 6ms delay. [[code]](https://github.com/anchitbhuhan/AVR/blob/main/timer0_8ms.c)
