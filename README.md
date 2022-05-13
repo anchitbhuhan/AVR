@@ -115,5 +115,73 @@
            
          But don’t think that you can use prescaler freely. It comes at a cost. There is a trade-off between resolution and duration. As you must have seen above, the          overall duration of measurement has increased from a mere 16.384 ms to 131.072 ms. So has the resolution. The resolution has also increased from 0.00025 ms to          0.002 ms (technically the resolution has actually decreased). This means each tick will take 0.002 ms. So, what’s the problem with this? The problem is that            the accuracy has decreased. Earlier, you were able to measure duration like 0.1125 ms accurately (0.1125/0.00025 = 450), but now you cannot (0.1125/0.002 =            56.25). The new timer can measure 0.112 ms and then 0.114 ms. No other value in between.
          
+ 
+ ## Choosing Prescalers
+         Let’s take an example. We need a delay of 184 ms (I have chosen any random number). We have F_CPU = 4 MHz. The AVR offers us the following prescaler values to          choose from: 8, 64, 256 and 1024. A prescaler of 8 means the effective clock frequency will be F_CPU/8. Now substituting each of these values into the above            formula, we get different values of timer value. The results are summarized as below:
+         
+         Case 1 : Prescaler = 8
+                  
+                  Effective Freq = 4MHz/8 = 500KHz.
+                  
+                  Count = Delay
+                         -------   - 1
+                         Clock_Freq
+                         
+                        = 184ms
+                          ------    -1 
+                          500KHz
+                        = 184 * 10^-3 * 500 * 10 ^ 3  - 1
+                        = 184*500 - 1
+                        = 92000 - 1
+                        = 91999 timer counts
+           
+          Case 2 : Prescaler = 64
+                  
+                  Effective Freq = 4MHz/64 = 62.5KHz.
+                  
+                  Count = Delay
+                         -------   - 1
+                         Clock_Freq
+                         
+                        = 184ms
+                          ------    -1 
+                          62.5KHz
+                        = 184 * 10^-3 * 62.5 * 10 ^ 3  - 1
+                        = 184*62.5 - 1
+                        = 11500 - 1
+                        = 11499 timer counts
+                        
+           Case 3 : Prescaler = 256
+                  
+                  Effective Freq = 4MHz/256 = 15.625KHz.
+                  
+                  Count = Delay
+                         -------   - 1
+                         Clock_Freq
+                         
+                        = 184ms
+                          ------    -1 
+                          15.625KHz
+                        = 184 * 10^-3 * 15.625 * 10 ^ 3  - 1
+                        = 184*15.625 - 1
+                        = 2875 - 1
+                        = 2874 timer counts
+                        
+             Case 4 : Prescaler = 1024
+                  
+                  Effective Freq = 4MHz/1024 = 3906.25Hz.
+                  
+                  Count = Delay
+                         -------   - 1
+                         Clock_Freq
+                         
+                        = 184ms
+                          ------    -1 
+                          3906.25Hz
+                        = 184 * 10^-3 * 3906.25   - 1
+                        = 184*3906.25*10^-3 - 1
+                        = 718.750 - 1
+                        = 717.750 timer counts
+                  
          
 2. **Timer0**
