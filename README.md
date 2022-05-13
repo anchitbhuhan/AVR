@@ -317,3 +317,99 @@
            We can use 1024 Prescaler.
            
           Code to generate 6ms delay. [[code]](https://github.com/anchitbhuhan/AVR/blob/main/timer0_8ms.c)
+          
+          
+          
+          
+          
+     Now let’s change the problem statement to something you can actually see! Let’s flash an LED every 50 ms (you can surely see the LED flashing this time ;)). We have an XTAL of 16 MHz.
+     
+          case 1 : No Prescalar
+               Timer Count =        Required Delay
+                                ----------------    - 1
+                                Clock Time Period
+                                
+                            =      50ms
+                                -----------    -1
+                                16MHz
+                            =  50 * 10^-3 * 16*10^6 -1
+                            = 800 * 10^3 -1
+                            = 799999
+           
+               case 2 : 16MHz/8 = 2MHz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      50ms
+                                     -----------    -1
+                                     2MHz
+                                 =  50 * 10^-3 * 2*10^6 -1
+                                 = 100 * 10^3 -1
+                                 = 99999
+                                 
+                                 
+                case 3 : 16MHz/64 = 250KHz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      50ms
+                                     -----------    -1
+                                      250KHz
+                                 =  50 * 10^-3 * 250*10^3 -1
+                                 = 12500  -1
+                                 = 12499
+                 
+                 
+                 case 4 : 16MHz/256 = 62.5KHz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      50ms
+                                     -----------    -1
+                                      62.5KHz
+                                 =  50 * 10^-3 * 62.5*10^3 -1
+                                 = 3125  -1
+                                 = 3124
+                   
+                  case 4 : 16MHz/1024 = 15625Hz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      50ms
+                                     -----------    -1
+                                      15625Hz
+                                 =  50 * 10^-3 * 15625 -1
+                                 = 781250*10^-3  -1
+                                 = 780.250
+                                 
+                                 
+                    None of the prescaler seems to work, we have to use interrupts here.
+                    
+                    
+                    The concept here is that the hardware generates an interrupt every time the timer overflows. Since the required delay is greater than the maximum possible delay, obviously the timer will overflow. And whenever the timer overflows, an interrupt is fired. Now the question is how many times should the interrupt be fired?
+                    
+                    Lets choose prescaler of 256
+                              Max delay  = (255+1) * 62.5KHz
+                              Max delay = 256/62500
+                                        = 0.004096
+                                        = 4.096ms
+                      
+                      
+                      
+                      50ms / 4.096ms = 12.207
+                      
+                      Thus the timer has to overflow 12 times(12*4.096 = 49.152ms), 
+                      Remaining time = 50-49.152 = 0.848ms
+                      
+                      remaining counr = 0.848ms/62.5KHz -1
+                                     = (0.848 * 10^-3 * 62.5 * 10^-3) -1
+                                     = 53-1
+                                     = 52 counts
+                                     
+                                     we take 53
+                        
+                                     
