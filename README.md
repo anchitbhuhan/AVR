@@ -437,7 +437,62 @@
                
                https://github.com/anchitbhuhan/AVR/blob/main/timer1_1s.c
                
-        
                
+               
+4. **Timer2**
+
+
+         In this post, we will discuss about TIMER2. Since TIMER2 is an 8-bit timer (like TIMER0), most of the registers are similar to that of TIMER0 registers. Apart from that, TIMER2 offers a special feature which other timers don’t – Asynchronous Operation. We will discuss about it later.
+         
+         
+         
+      In this post, we will discuss about TIMER2. Since TIMER2 is an 8-bit timer (like TIMER0), most of the registers are similar to that of TIMER0 registers. Apart from that, TIMER2 offers a special feature which other timers don’t – Asynchronous Operation. We will discuss about it later.
+      
+      
+      Same as Timer0
+      
+      
+
+
+## CTC Mode
+
+          So till now, we have dealt with the basic concepts. We had two timer values with us – Set Point (SP) and Process Value (PV). In every iteration, we used to compare the process value with the set point. Once the process value becomes equal (or exceeds) the set point, the process value is reset. The following code snippet explains it:
+          
+          
+          max = 39999;   // max timer value set  <--- set point
+
+// some code here
+// ...
+// ...
+// ...
+
+// TCNT1 <--- process value
+if (TCNT1 >= max)   // process value compared with the set point
+{
+    TCNT1 = 0;      // process value is reset
+}
+
+// ...
+
+
+
+Here, we have used the example of TIMER1. Since TIMER1 is a 16-bit timer, it can count upto a maximum of 65535. Here, what we desire is that the timer (process value) should reset as soon as its value becomes equal to (or greater than) the set point of 39999.
+
+
+So basically, the CTC Mode implements the same thing, but unlike the above example, it implements it in hardware. Which means that we no longer need to worry about comparing the process value with the set point every time! This will not only avoid unnecessary wastage of cycles, but also ensure greater accuracy (i.e. no missed compares, no double increment, etc).
+
+Hence, this comparison takes place in the hardware itself, inside the AVR CPU! Once the process value becomes equal to the set point, a flag in the status register is set and the timer is reset automatically! Thus goes the name – CTC – Clear Timer on Compare! Thus, all we need to do is to take care of the flag, which is much more faster to execute.
+
+Let us analyze this CTC Mode in detail with the help of a problem statement
+
+
+
+Let’s take up a problem statement to understand this concept. We need to flash an LED every 100 ms. We have a crystal of XTAL 16 MHz.
+
+
+Now, given XTAL = 16 MHz, with a prescaler of 64, the frequency of the clock pulse reduces to 250 kHz. With a Required Delay = 100 ms, we get the Timer Count to be equal to 24999. Up until now, we would have let the value of the timer increment, and check its value every iteration, whether it’s equal to 24999 or not, and then reset the timer. Now, the same will be done in hardware! We won’t check its value every time in software! We will simply check whether the flag bit is set or not, that’s all. Confused, eh? Well, don’t worry, just read on! 😉
+
+
+
                
          
