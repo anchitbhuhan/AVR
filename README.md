@@ -199,3 +199,57 @@
           So folks, I guess this much is enough for you to get a hold of what timers are and the features of AVR Timers. From the next post, we will implement these             concepts and learn how to code the AVR!
 
 2. **Timer0**
+     Let’s define a problem statement for us. The simplest one being the LED flasher. Let’s say, we need to flash an LED every 6 ms and we are have a CPU clock frequency of 32 kHz.
+          
+          Timer Count =        Required Delay
+                                ----------------    - 1
+                                Clock Time Period
+                                
+          Timer Count =         6ms
+                              -----------------    -1
+                              32 KHz
+                      
+                      =      6 * 10^-3 * 32 * 10^3 - 1
+                      =      191
+          
+          We can achieve this count by using 8 bit register since it can count maximum upto 255.
+          
+          
+      #### TCNT0 Register
+          This is the 8 bit counter register. The value stored in this register increase/decreases automatically. 
+          
+          But this register won’t be activated unless we activate the timer! Thus we need to set the timer up. How?
+          
+      #### TCCR0 Register
+          
+               FOCO      WGM00     COM01     COM00     WGM01     CS02      CS01      CS00
+               
+               
+               
+               CS02      CS01      CS00           Description
+               0         0         0              No Clock Source(Timer/Counter Stopped)
+               0         0         1              clk(No Prescaling)
+               0         1         1              clk/8(From Prescaler)
+               1         0         0              clk/64(From Prescaler)
+               1         0         1              clk/256(From Prescaler)
+               1         1         0              clk/1024(From Prescaler)
+               1         1         0              External Clock Source on T0 Pin. Clock on Falling Edge
+               1         1         1              External Clock Source on T0 Pin. Clock on Rising Edge
+               
+               
+               For Choosig No Prescaling, we set TCCR0 as
+               
+               TCCR0 |= (1 << CS00);
+               
+               Please note that if you do not initialize this register, all the bits will remain as zero and the timer/counter will remain stopped.
+               
+               
+               https://maxembedded.wordpress.com/2011/06/10/port-operations-in-avr/
+               
+               Code to generate 6ms delay. [[code]](https://github.com/anchitbhuhan/AVR/blob/main/timer0_6ms.c)
+               
+               
+               
+               
+           
+     
