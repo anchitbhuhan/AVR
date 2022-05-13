@@ -418,4 +418,26 @@
                
                
                
-       
+3. **Timer1**
+         
+         Okay, let’s make it loud and clear. We need to flash an LED every 2 seconds, i.e. at a frequency of 0.5 Hz. We have an XTAL of 16 MHz.
+         
+         
+               XTAL = 16MHz
+               
+               Prescaler           Max delay
+               ______________________________
+               No Prescaler        4.096ms
+               8                   32.768ms
+               
+               
+               2000ms/32.768ms = 61.035 overflows
+               
+               We have blink LED after every approx 61 overflows
+               
+               https://github.com/anchitbhuhan/AVR/blob/main/timer1_1s.c
+               
+        
+               
+               
+         
