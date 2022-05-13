@@ -41,5 +41,79 @@
                                 Clock Time Period
     
     Now to count upto 39999, we cannot use  8 bit timer, since it counts only upto 255, so we have to use 16 bit timer (MAX=65535).
-    
+#### The Prescaler
+     Q) What is the maximum delay that can be achieved using 8 bit and 16 bit timer, given XTAL = 4MHz ?
+     Ans - for 8 bit
+                    255 = Delay
+                         -------    - 1
+                         4MHz
+                    
+                    256*1
+                    ------ seconds   = Max Delay
+                    4 x 10^6
+                    
+                    0.000064  = Max Delay
+                    
+                    Max Delay = 0.064ms
+           for 16 bit
+                    65535 =  Delay
+                            -------    - 1
+                             4MHz
+                    
+                    65535*1
+                    ------ seconds   = Max Delay
+                    4 x 10^6
+                    
+                    0.01638375  = Max Delay
+                    
+                    Max Delay = 16.4ms
+           
+           What if we need more delay than 16.4ms ???
+           
+           We can try to decrease the XTAL Value
+           
+           4MHz ------------> 3MHz
+           
+           for 16 bit
+                     65535 =  Delay
+                            -------    - 1
+                             3MHz
+                    
+                    65535*1
+                    ------ seconds   = Max Delay
+                    3 x 10^6
+                    
+                    0.021845  = Max Delay
+                    
+                    Max Delay = 21.8ms
+            
+            4MHz ------------> 2MHz
+           
+            for 16 bit
+                     65535 =  Delay
+                            -------    - 1
+                             2MHz
+                    
+                    65535*1
+                    ------ seconds   = Max Delay
+                    2 x 10^6
+                    
+                    0.0327675  = Max Delay
+                    
+                    Max Delay = 32.7ms
+          
+         So as we decrease the XTAL, we can achieve greater delay.
+         
+         But we cannot simply decrease the XTAL frequency, that is a hardware property.
+         So we use Prescalers.
+         
+         
+         We do not reduce the actual F_CPU. The actual F_CPU remains the same (at 4 MHz in this case). So basically,
+         we derive a frequency from it to run the timer.
+         
+         Thus, while doing so, we divide the frequency and use it. There is a provision to do so in AVR by setting some bits which we will discuss later.
+           
+         But don’t think that you can use prescaler freely. It comes at a cost. There is a trade-off between resolution and duration. As you must have seen above, the          overall duration of measurement has increased from a mere 16.384 ms to 131.072 ms. So has the resolution. The resolution has also increased from 0.00025 ms to          0.002 ms (technically the resolution has actually decreased). This means each tick will take 0.002 ms. So, what’s the problem with this? The problem is that            the accuracy has decreased. Earlier, you were able to measure duration like 0.1125 ms accurately (0.1125/0.00025 = 450), but now you cannot (0.1125/0.002 =            56.25). The new timer can measure 0.112 ms and then 0.114 ms. No other value in between.
+         
+         
 2. **Timer0**
