@@ -249,7 +249,70 @@
                Code to generate 6ms delay. [[code]](https://github.com/anchitbhuhan/AVR/blob/main/timer0_6ms.c)
                
                
+       Now let’s change the above problem statement to the following. We need to flash an LED every 8 ms and we have an XTAL of 16 MHz. Well, 8 ms is still low, but it’s good enough for the following illustration.
+       
                
-               
+            case 1 : No Prescalar
+               Timer Count =        Required Delay
+                                ----------------    - 1
+                                Clock Time Period
+                                
+                            =      8ms
+                                -----------    -1
+                                16MHz
+                            =  8 * 10^-3 * 16*10^6 -1
+                            = 128 * 10^3 -1
+                            = 127999
+           
+               case 2 : 16MHz/8 = 2MHz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      8ms
+                                     -----------    -1
+                                     2MHz
+                                 =  8 * 10^-3 * 2*10^6 -1
+                                 = 16 * 10^3 -1
+                                 = 15999
+                                 
+                                 
+                case 3 : 16MHz/64 = 250KHz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      8ms
+                                     -----------    -1
+                                      250KHz
+                                 =  8 * 10^-3 * 250*10^3 -1
+                                 = 2000  -1
+                                 = 1999
+                 
+                 
+                 case 4 : 16MHz/256 = 62.5KHz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      8ms
+                                     -----------    -1
+                                      62.5KHz
+                                 =  8 * 10^-3 * 62.5*10^3 -1
+                                 = 500  -1
+                                 = 499
+                   
+                  case 4 : 16MHz/1024 = 15625Hz
+                    Timer Count =        Required Delay
+                                        ----------------    - 1
+                                        Clock Time Period
+                                
+                                 =      8ms
+                                     -----------    -1
+                                      15625Hz
+                                 =  8 * 10^-3 * 15625 -1
+                                 = 125000*10^-3  -1
+                                 = 124
+                            
            
      
