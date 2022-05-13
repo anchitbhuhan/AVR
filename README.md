@@ -413,3 +413,9 @@
                                      we take 53
                         
                                      
+               https://github.com/anchitbhuhan/AVR/blob/main/timer0_50ms.c
+               
+               
+               
+               
+       
