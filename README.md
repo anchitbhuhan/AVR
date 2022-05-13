@@ -182,6 +182,20 @@
                         = 184*3906.25*10^-3 - 1
                         = 718.750 - 1
                         = 717.750 timer counts
+                        
+               Now out of these four prescalers, 8 cannot be used as the timer value exceeds the limit of 65535. Also, since the timer always takes up integer values,                we cannot choose 1024 as the timer count is a decimal digit. Hence, we see that prescaler values of 64 and 256 are feasible. But out of these two, we                  choose 64 as it provides us with greater resolution. We can choose 256 if we need the timer for a greater duration elsewhere.
+
+               Thus, we always choose prescaler which gives the counter value within the feasible limit (255 or 65535) and the counter value should always be an                      integer.
                   
-         
+ ### Interrupts
+          Well, this is not exclusively related to timers, but I thought of discussing it as it is used in a variety of places. Let me explain it using an analogy. Say           now you are reading my post. It’s dinner time and your mom (only if you live with your mom ;)) calls you for dinner. What do you do (if she gets too creepy)?           You save your work and attend to your mom’s call, then return and resume reading. This is an example of interrupt.
+
+          In most microcontrollers, there is something called interrupt. This interrupt can be fired whenever certain conditions are met. Now whenever an interrupt is           fired, the AVR stops and saves its execution of the main routine,  attends to the interrupt call (by executing a special routine, called the Interrupt                 Service Routine, ISR) and once it is done with it, returns to the main routine and continues executing it.
+
+          For example, in the condition of counter overflow, we can set up a bit to fire an interrupt whenever an overflow occurs. Now, during execution of the                   program, whenever an overflow occurs, an interrupt is fired and the CPU attends to the corresponding ISR. Now it’s up to us what do we want to do inside the           ISR. We can toggle the value of a pin, or increment a counter, etc etc.
+
+          If you didn’t get the concept of interrupts and ISR, behold for sometime till we discuss it how to implement it in hardware.
+
+          So folks, I guess this much is enough for you to get a hold of what timers are and the features of AVR Timers. From the next post, we will implement these             concepts and learn how to code the AVR!
+
 2. **Timer0**
