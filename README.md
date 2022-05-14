@@ -537,5 +537,28 @@ count =  1ms
         125KHz
 count = 125 -1 = 124
 
+https://github.com/anchitbhuhan/AVR/blob/main/timer0_square_wave_ctc.c
 
 
+**Timer 1 CTC**
+https://github.com/anchitbhuhan/AVR/blob/main/timer1_square_wave_ctc.c
+
+
+
+
+## Using Interrupts with CTC Mode
+
+In the previous methodology, we simply used the CTC Mode of operation. We used to check every time for the flag bit (OCF1A). Now let’s shift this responsibility to the AVR itself! Yes, now we do not need to check for the flag bit at all! The AVR will compare TCNT1 with OCR1A. Whenever a match occurs, it sets the flag bit OCF1A, and also fires an interrupt! We just need to attend to that interrupt, that’s it! No other headache of comparing and stuffs!
+
+There are three kinds of interrupts in AVR – overflow, compare and capture. We have already discussed the overflow interrupt in previous posts. For this case, we need to enable the compare interrupt. The following register is used to enable interrupts.
+
+We have already come across TOIE1 bit. Now, the Bit 4:3 – OCIE1A:B – Timer/Counter1, Output Compare A/B Match Interrupt Enable bits are of our interest here. Enabling it ensures that an interrupt is fired whenever a match occurs. Since there are two CTC channels, we have two different bits OCIE1A and OCIE1B for them.
+
+Thus, to summarize, whenever a match occurs (TCNT1 becomes equal to OCR1A = 24999), an interrupt is fired (as OCIE1A is set) and the OCF1A flag is set. Now since an interrupt is fired, we need an Interrupt Service Routine (ISR) to attend to the interrupt. Executing the ISR clears the OCF1A flag bit automatically and the timer value (TCNT1) is reset.
+
+
+Timer 0
+
+
+
+Timer 1
