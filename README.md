@@ -456,6 +456,8 @@
 
 ## CTC Mode
 
+Timer0
+
           So till now, we have dealt with the basic concepts. We had two timer values with us – Set Point (SP) and Process Value (PV). In every iteration, we used to compare the process value with the set point. Once the process value becomes equal (or exceeds) the set point, the process value is reset. The following code snippet explains it:
           
           
@@ -493,6 +495,47 @@ Let’s take up a problem statement to understand this concept. We need to flash
 Now, given XTAL = 16 MHz, with a prescaler of 64, the frequency of the clock pulse reduces to 250 kHz. With a Required Delay = 100 ms, we get the Timer Count to be equal to 24999. Up until now, we would have let the value of the timer increment, and check its value every iteration, whether it’s equal to 24999 or not, and then reset the timer. Now, the same will be done in hardware! We won’t check its value every time in software! We will simply check whether the flag bit is set or not, that’s all. Confused, eh? Well, don’t worry, just read on! 😉
 
 
+TCCR0
 
-               
-         
+FOCO    WGM00   COM01   COM00   WGM01   CS02    CS01    CS00
+
+In order to program timer0 in CTC mode, we need to program bits WGM00 and WGM01
+to 0 and 1
+
+TCCR0 |= (1 << WGM01)
+
+TIFR
+
+OCF2    TOV2    ICF1    OCF1A   OCF1B   TOV1    OCF0    TOV0
+
+When the compare occurs this OCF0 flag is set. So we need to observe this flag.
+
+IN CTC mode, in the TCNT0 we are going to load 0
+In OCR0 , the desired value is loaded.
+
+When a compare occurs between TCNT0 and OCR0, OCF0 flag is set.
+
+Q) Assuming that XTAL = 8MHz. Write a program to generate a square wave with a period of 2ms in pin PB3.
+
+
+        <---1ms---->
+         ________           ________
+        |        |         |        |
+        |        |         |        |
+        |        |         |        |
+--------         ----------         ----------
+        <-------2ms--------->
+
+
+
+Use Prescaler = 64
+
+Required delay = 1ms
+
+count =  1ms
+        -----   -  1
+        125KHz
+count = 125 -1 = 124
+
+
+
